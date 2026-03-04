@@ -16,17 +16,14 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            /* Menggunakan warna gelap yang dipaksakan (!important) agar tidak ditimpa tema GitHub */
+            height: 100vh; /* Memastikan arena lari presisi sebesar layar */
             background: linear-gradient(-45deg, #0f172a, #1e1b4b, #312e81, #1e3a8a) !important;
             background-size: 400% 400% !important;
             animation: gradientBG 15s ease infinite !important;
             font-family: 'Poppins', sans-serif;
-            overflow: hidden; 
+            overflow: hidden; /* Mengunci total layar dari scroll */
             color: white;
-            width: 100vw;
-            height: 100vh;
-            position: fixed;
+            margin: 0;
         }
 
         @keyframes gradientBG {
@@ -64,7 +61,6 @@
             display: flex;
             justify-content: center;
             gap: 20px;
-            position: relative;
         }
 
         button {
@@ -78,7 +74,7 @@
             transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        /* Tombol IYA - Biru */
+        /* Tombol IYA */
         #btn-iya {
             background: linear-gradient(135deg, #3b82f6, #2563eb);
             color: white;
@@ -90,16 +86,11 @@
             box-shadow: 0 15px 25px rgba(59, 130, 246, 0.6);
         }
 
-        #btn-iya:active {
-            transform: translateY(1px);
-        }
-
-        /* Tombol TIDAK - Merah Solid (Diperbarui agar selalu terlihat) */
+        /* Tombol TIDAK */
         #btn-tidak {
-            background: #ef4444; /* Warna merah agar kontras */
+            background: #ef4444; 
             color: white;
             box-shadow: 0 10px 20px rgba(239, 68, 68, 0.4);
-            position: relative; 
             transition: top 0.2s ease-out, left 0.2s ease-out; 
             z-index: 9999; 
         }
@@ -119,6 +110,12 @@
         const btnTidak = document.getElementById('btn-tidak');
 
         function lari() {
+            // KUNCI SOLUSINYA DI SINI:
+            // Memindahkan tombol dari dalam "card" langsung ke "body" agar tidak terpengaruh jebakan efek blur
+            if (btnTidak.parentNode !== document.body) {
+                document.body.appendChild(btnTidak);
+            }
+
             btnTidak.style.position = 'fixed';
 
             const lebarLayar = window.innerWidth;
@@ -132,15 +129,18 @@
             const batasMaxX = lebarLayar - lebarTombol - jarakAman;
             const batasMaxY = tinggiLayar - tinggiTombol - jarakAman;
 
-            const randomX = Math.floor(Math.random() * (batasMaxX - jarakAman + 1)) + jarakAman;
-            const randomY = Math.floor(Math.random() * (batasMaxY - jarakAman + 1)) + jarakAman;
+            // Memastikan koordinat tidak ada yang bernilai minus atau offside
+            const randomX = Math.max(jarakAman, Math.floor(Math.random() * (batasMaxX - jarakAman + 1)) + jarakAman);
+            const randomY = Math.max(jarakAman, Math.floor(Math.random() * (batasMaxY - jarakAman + 1)) + jarakAman);
 
             btnTidak.style.left = randomX + 'px';
             btnTidak.style.top = randomY + 'px';
         }
 
+        // Mouse (Laptop)
         btnTidak.addEventListener('mouseover', lari);
 
+        // Sentuh (HP/Tablet)
         btnTidak.addEventListener('touchstart', function(event) {
             event.preventDefault(); 
             lari();
