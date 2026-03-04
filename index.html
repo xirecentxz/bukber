@@ -17,13 +17,13 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: linear-gradient(-45deg, #0f172a, #1e1b4b, #312e81, #1e3a8a);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            /* Menggunakan warna gelap yang dipaksakan (!important) agar tidak ditimpa tema GitHub */
+            background: linear-gradient(-45deg, #0f172a, #1e1b4b, #312e81, #1e3a8a) !important;
+            background-size: 400% 400% !important;
+            animation: gradientBG 15s ease infinite !important;
             font-family: 'Poppins', sans-serif;
-            overflow: hidden; /* Mengunci layar dari scroll */
+            overflow: hidden; 
             color: white;
-            /* Memastikan area body mengambil referensi layar penuh */
             width: 100vw;
             height: 100vh;
             position: fixed;
@@ -36,10 +36,10 @@
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.1) !important;
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 24px;
             padding: 50px 30px;
             text-align: center;
@@ -78,7 +78,7 @@
             transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        /* Tombol IYA */
+        /* Tombol IYA - Biru */
         #btn-iya {
             background: linear-gradient(135deg, #3b82f6, #2563eb);
             color: white;
@@ -94,15 +94,14 @@
             transform: translateY(1px);
         }
 
-        /* Tombol TIDAK */
+        /* Tombol TIDAK - Merah Solid (Diperbarui agar selalu terlihat) */
         #btn-tidak {
-            background: rgba(255, 255, 255, 0.1);
+            background: #ef4444; /* Warna merah agar kontras */
             color: white;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(5px);
-            position: relative; /* Posisi awal rapi di sebelah IYA */
+            box-shadow: 0 10px 20px rgba(239, 68, 68, 0.4);
+            position: relative; 
             transition: top 0.2s ease-out, left 0.2s ease-out; 
-            z-index: 9999; /* Selalu berada di lapisan paling atas */
+            z-index: 9999; 
         }
     </style>
 </head>
@@ -120,39 +119,30 @@
         const btnTidak = document.getElementById('btn-tidak');
 
         function lari() {
-            // Ubah menjadi fixed agar tombol terlepas dari tata letak dan berpatokan murni pada ukuran layar
             btnTidak.style.position = 'fixed';
 
-            // Mengambil ukuran layar yang benar-benar terlihat
             const lebarLayar = window.innerWidth;
             const tinggiLayar = window.innerHeight;
 
-            // Mengambil ukuran fisik tombol itu sendiri
             const lebarTombol = btnTidak.offsetWidth;
             const tinggiTombol = btnTidak.offsetHeight;
 
-            // Jarak aman (padding) dari tepi layar agar tidak terpotong
             const jarakAman = 20;
 
-            // Menghitung batas maksimal koordinat agar tombol tidak keluar jalur
             const batasMaxX = lebarLayar - lebarTombol - jarakAman;
             const batasMaxY = tinggiLayar - tinggiTombol - jarakAman;
 
-            // Mengacak koordinat baru dengan batas minimal (jarakAman) dan maksimal (batasMax)
             const randomX = Math.floor(Math.random() * (batasMaxX - jarakAman + 1)) + jarakAman;
             const randomY = Math.floor(Math.random() * (batasMaxY - jarakAman + 1)) + jarakAman;
 
-            // Memindahkan tombol
             btnTidak.style.left = randomX + 'px';
             btnTidak.style.top = randomY + 'px';
         }
 
-        // Trigger 1: Untuk Mouse di Laptop/PC
         btnTidak.addEventListener('mouseover', lari);
 
-        // Trigger 2: Untuk Layar Sentuh di HP/Tablet
         btnTidak.addEventListener('touchstart', function(event) {
-            event.preventDefault(); // Mencegah klik paksa
+            event.preventDefault(); 
             lari();
         }, { passive: false });
     </script>
