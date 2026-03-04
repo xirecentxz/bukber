@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Undangan Bukber</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            /* Latar belakang gradasi modern yang bergerak animasi */
+            background: linear-gradient(-45deg, #0f172a, #1e1b4b, #312e81, #1e3a8a);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden; /* Mencegah layar tergeser saat tombol lari */
+            color: white;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Efek Kotak Kaca (Glassmorphism) */
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 50px 30px;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+            max-width: 90%;
+            width: 400px;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 40px;
+            line-height: 1.3;
+            /* Teks dengan warna gradasi emas/oranye khas tema elegan */
+            background: -webkit-linear-gradient(45deg, #facc15, #f97316);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0px 4px 20px rgba(250, 204, 21, 0.2);
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            position: relative;
+        }
+
+        button {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            padding: 14px 32px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        /* Tombol IYA: Menyala (Glowing) & Interaktif */
+        #btn-iya {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        #btn-iya:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(59, 130, 246, 0.6);
+        }
+
+        #btn-iya:active {
+            transform: translateY(1px);
+        }
+
+        /* Tombol TIDAK: Tersamar dan licin */
+        #btn-tidak {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            position: relative; 
+            transition: top 0.15s ease-out, left 0.15s ease-out; /* Berlari dengan mulus, tidak patah-patah */
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>YUK, BUKBER TANGGAL 19</h1>
+        <div class="button-container">
+            <button id="btn-iya" onclick="alert('Mantap! Langsung diamankan kursinya. Jangan sampai telat ya!')">IYA</button>
+            
+            <button id="btn-tidak" tabindex="-1" onclick="return false;">TIDAK</button>
+        </div>
+    </div>
+
+    <script>
+        const btnTidak = document.getElementById('btn-tidak');
+        let isMoving = false;
+
+        function lari() {
+            // Ubah posisi menjadi fixed agar tombol bebas bergerak di seluruh layar
+            if (!isMoving) {
+                btnTidak.style.position = 'fixed';
+                isMoving = true;
+            }
+
+            // Hitung ruang aman agar tombol tidak melesat keluar dari layar monitor/HP
+            const batasKananKiri = window.innerWidth - btnTidak.offsetWidth - 20; 
+            const batasAtasBawah = window.innerHeight - btnTidak.offsetHeight - 20;
+
+            // Generate koordinat acak
+            const randomX = Math.max(10, Math.floor(Math.random() * batasKananKiri));
+            const randomY = Math.max(10, Math.floor(Math.random() * batasAtasBawah));
+
+            // Eksekusi perpindahan
+            btnTidak.style.left = randomX + 'px';
+            btnTidak.style.top = randomY + 'px';
+        }
+
+        // Trigger 1: Laptop/PC (Saat kursor mouse mendekat)
+        btnTidak.addEventListener('mouseover', lari);
+
+        // Trigger 2: HP/Tablet (Saat layar disentuh)
+        // { passive: false } memastikan preventDefault bisa memblokir klik paksa di browser HP modern
+        btnTidak.addEventListener('touchstart', function(event) {
+            event.preventDefault(); 
+            lari();
+        }, { passive: false });
+    </script>
+</body>
+</html>
